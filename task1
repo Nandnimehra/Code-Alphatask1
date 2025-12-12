@@ -1,0 +1,64 @@
+import random
+
+def hangman_game():
+    # 1. Use a small list of 5 predefined words
+    word_list = ["PYTHON", "CODE", "PROGRAM", "HANGMAN", "ALGORITHM"]
+    
+    # Select a random word and convert it to uppercase
+    secret_word = random.choice(word_list).upper()
+    word_length = len(secret_word)
+    
+    # Initialize the display word with underscores
+    guessed_letters = set()
+    display_word = ["_"] * word_length
+    
+    # 2. Limit incorrect guesses to 6
+    max_incorrect_guesses = 6
+    incorrect_guesses = 0
+    
+    print("Welcome to Hangman!")
+    print(f"The word has {word_length} letters.")
+    print(" ".join(display_word))
+
+    # Main game loop
+    while incorrect_guesses < max_incorrect_guesses and "_" in display_word:
+        print("\n" + "="*30)
+        print(f"Incorrect guesses left: {max_incorrect_guesses - incorrect_guesses}")
+        print(f"Guessed letters: {', '.join(sorted(guessed_letters))}")
+        
+        # Get user input
+        guess = input("Guess a letter: ").upper()
+        
+        # Input validation
+        if len(guess) != 1 or not 'A' <= guess <= 'Z':
+            print("Invalid input. Please enter a single letter.")
+            continue
+        
+        if guess in guessed_letters:
+            print(f"You already guessed the letter '{guess}'. Try again.")
+            continue
+            
+        guessed_letters.add(guess)
+        
+        if guess in secret_word:
+            print("Good guess!")
+            # Update the display word
+            for i in range(word_length):
+                if secret_word[i] == guess:
+                    display_word[i] = guess
+        else:
+            print("Incorrect guess!")
+            incorrect_guesses += 1
+        
+        print(" ".join(display_word))
+
+    # Game end conditions
+    if "_" not in display_word:
+        print("\n🥳 Congratulations! You guessed the word!")
+        print(f"The word was: {secret_word}")
+    else:
+        print("\n💀 Game Over! You ran out of guesses.")
+        print(f"The word was: {secret_word}")
+
+# Uncomment the line below to run the Hangman Game
+# hangman_game()
